@@ -5,11 +5,13 @@
 <head>
     <title>Forside</title>
 
-    <!-- Her skriver dere CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
         body {
             background-color: lightblue;
             text-align: center;
+            font-family: Arial, sans-serif;
         }
 
         h1 {
@@ -19,25 +21,64 @@
         button {
             background-color: blueviolet;
             color: white;
-padding: 12px 25px;
-border: none;
-border-radius: 8px;
-cursor: pointer;
-font-size: 16px;
- margin: 10px;
-    }
-</style>
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+        }
 
+        .temperatur {
+            background-color: white;
+            padding: 20px;
+            margin: 25px auto;
+            border-radius: 12px;
+            max-width: 400px;
+        }
+
+        #temperature {
+            font-size: 45px;
+            color: blueviolet;
+            font-weight: bold;
+        }
+
+        .graf {
+            background-color: white;
+            padding: 20px;
+            margin: 25px auto;
+            border-radius: 12px;
+            max-width: 700px;
+        }
+
+        .graf-container {
+            height: 300px;
+        }
+    </style>
 </head>
 
 <body>
 
-    <!-- Her skriver dere overskriften -->
     <h1>Temperatursensor</h1>
 
     <p>Dette er vårt prosjekt.</p>
 
-    <!-- Her skriver dere knappene -->
+    <!-- Temperatur fra Blynk -->
+    <div class="temperatur">
+        <h2>Temperaturen akkurat nå</h2>
+        <div id="temperature">-- °C</div>
+        <p id="status">Henter temperatur...</p>
+    </div>
+
+    <!-- Temperaturgraf -->
+    <div class="graf">
+        <h2>Temperaturhistorikk</h2>
+        <div class="graf-container">
+            <canvas id="temperatureChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Knappene deres -->
     <a href="Backlogg.html">
         <button>Backlogg</button>
     </a>
@@ -49,9 +90,99 @@ font-size: 16px;
     <a href="kode.html">
         <button>Kode</button>
     </a>
-     <a href="graf.html">
+
+    <a href="graf.html">
         <button>Graf</button>
     </a>
+
+    <script>
+        const temperatureElement =
+            document.getElementById("temperature");
+
+        const statusElement =
+            document.getElementById("status");
+
+        const ctx =
+            document.getElementById("temperatureChart");
+
+        const chart = new Chart(ctx, {
+            type: "line",
+
+            data: {
+                labels: [],
+                datasets: [{
+                    label: "Temperatur (°C)",
+                    data: [],
+                    borderColor: "blueviolet",
+                    backgroundColor: "rgba(138, 43, 226, 0.15)",
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        title: {
+                            display: true,
+                            text: "Grader Celsius"
+                        }
+                    }
+                }
+            }
+        });
+
+        async function hentTemperatur() {
+            try {
+                const response =
+                    await fetch("/api/temperature");
+
+                const data = await response.json();
+
+                if (!response.ok || !data.success ||
+                    !Number.isFinite(data.temperature)) {
+                    throw new Error("Ugyldig temperaturdata");
+                }
+
+                const temperatur = data.temperature;
+
+                temperatureElement.textContent =
+                    temperatur.toFixed(1) + " °C";
+
+                if (temperatur < 18 || temperatur > 26) {
+                    statusElement.textContent = "Alarmtemperatur!";
+                } else if (temperatur < 20 || temperatur > 22) {
+                    statusElement.textContent = "Temperaturen er litt utenfor idealområdet";
+                } else {
+                    statusElement.textContent = "Temperaturen er perfekt!";
+                }
+
+                chart.data.labels.push(
+                    new Date().toLocaleTimeString("no-NO")
+                );
+
+                chart.data.datasets[0].data.push(temperatur);
+
+                if (chart.data.labels.length > 30) {
+                    chart.data.labels.shift();
+                    chart.data.datasets[0].data.shift();
+                }
+
+                chart.update();
+
+            } catch (error) {
+                statusElement.textContent =
+                    "Kunne ikke hente temperatur fra Blynk";
+
+                console.error(error);
+            }
+        }
+
+        hentTemperatur();
+        setInterval(hentTemperatur, 2000);
+    </script>
 
 </body>
 </html>

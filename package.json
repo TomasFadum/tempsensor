@@ -1,9 +1,10 @@
 {
-  "name": "temp-prsjoelt-gtuppe-57",
+  "name": "temp-prosjekt-gruppe-5",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

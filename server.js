@@ -1,17 +1,31 @@
 
 const express = require("express");
 const axios = require("axios");
+const path = require("path");
 require("dotenv").config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.static("public"));
+// Åpne riktig forside
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "Temp_prosjekt_gruppe5.html"));
+});
 
+// Gjør prosjektfilene tilgjengelige
+app.use(express.static(__dirname, { dotfiles: "deny" }));
+
+// Hent temperatur fra Blynk
 app.get("/api/temperature", async (req, res) => {
     try {
         const response = await axios.get(
-            `https://blynk.cloud/external/api/get?token=${process.env.BLYNK_AUTH_TOKEN}&${process.env.BLYNK_PIN}`
+            "https://blynk.cloud/external/api/get",
+            {
+                params: {
+                    token: process.env.BLYNK_AUTH_TOKEN,
+                    [process.env.BLYNK_PIN]: ""
+                }
+            }
         );
 
         res.json({
