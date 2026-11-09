@@ -7,13 +7,10 @@ require("dotenv").config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Åpne riktig forside
+// Forsiden skal alltid være Temp_prosjekt_gruppe5.html
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "Temp_prosjekt_gruppe5.html"));
 });
-
-// Gjør prosjektfilene tilgjengelige
-app.use(express.static(__dirname, { dotfiles: "deny" }));
 
 // Hent temperatur fra Blynk
 app.get("/api/temperature", async (req, res) => {
@@ -42,6 +39,9 @@ app.get("/api/temperature", async (req, res) => {
         });
     }
 });
+
+// Gjør de andre HTML-filene tilgjengelige
+app.use(express.static(__dirname, { dotfiles: "deny" }));
 
 app.listen(PORT, () => {
     console.log(`Nettsiden kjører på http://localhost:${PORT}`);
