@@ -1,0 +1,151 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #090e19;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    padding: 35px 20px;
+}
+
+.dashboard {
+    max-width: 1000px;
+    margin: auto;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 35px;
+    gap: 15px;
+}
+
+header h1 {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+header p {
+    color: #8290a8;
+}
+
+.status {
+    background: #172536;
+    padding: 10px 16px;
+    border-radius: 30px;
+    color: #f4c15d;
+    font-size: 13px;
+}
+
+.dot {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    background: #f4c15d;
+    border-radius: 50%;
+    margin-right: 7px;
+}
+
+.temperature-card {
+    background: linear-gradient(135deg, #17283e, #101a2d);
+    border: 1px solid #263b58;
+    border-radius: 22px;
+    padding: 40px;
+    text-align: center;
+    margin-bottom: 22px;
+}
+
+.label {
+    color: #91a7c5;
+    letter-spacing: 3px;
+    font-size: 13px;
+}
+
+.temperature {
+    margin: 25px 0;
+    font-size: clamp(65px, 12vw, 110px);
+    font-weight: bold;
+    color: #54b8ff;
+}
+
+.unit {
+    font-size: 35px;
+    color: #a7c9e8;
+}
+
+.condition {
+    color: #55d69e;
+    font-size: 18px;
+}
+
+.updated {
+    margin-top: 15px;
+    color: #8290a8;
+    font-size: 13px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 22px;
+}
+
+.info-card,
+.history-card {
+    background: #111b2c;
+    border: 1px solid #26344b;
+    border-radius: 18px;
+    padding: 25px;
+}
+
+.info-card p,
+.history-card p {
+    color: #8290a8;
+    font-size: 12px;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+}
+
+.info-card h2 {
+    font-size: 21px;
+    color: #55d69e;
+}
+
+.history-card h2 {
+    margin-bottom: 10px;
+}
+
+#history {
+    margin-top: 20px;
+    color: #54b8ff;
+    line-height: 2;
+}
+
+footer {
+    text-align: center;
+    color: #65748c;
+    margin-top: 35px;
+    font-size: 13px;
+}
+
+@media (max-width: 600px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .temperature-card {
+        padding: 30px 15px;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+}
