@@ -1,192 +1,44 @@
 
 <!DOCTYPE html>
-<html lang="no">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Temperaturgraf</title>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
+    <title>Graf</title>
+     <style>
         body {
-            background: linear-gradient(135deg, #dbeafe, #e9d5ff);
-            background-attachment: fixed;
-            text-align: center;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 30px 15px;
-            min-height: 100vh;
-            color: #263047;
+            background-color: lightblue;
         }
-
-        h1 {
-            color: #7040b5;
-            font-size: 34px;
-            margin-top: 25px;
-        }
-
-        p {
-            color: #526078;
-            font-size: 17px;
-        }
-
-        .graf {
-            background: rgba(255, 255, 255, 0.85);
-            padding: 25px;
-            margin: 30px auto;
-            border-radius: 18px;
-            max-width: 850px;
-            box-shadow: 0 8px 25px rgba(50, 40, 90, 0.12);
-        }
-
-        .graf-container {
-            height: 350px;
-        }
-
-        button {
-            background: linear-gradient(135deg, #8052c7, #6336a5);
-            color: white;
-            padding: 14px 28px;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            margin: 10px;
-            box-shadow: 0 5px 12px rgba(75, 40, 120, 0.2);
-            transition: 0.2s ease;
-        }
-
-        button:hover {
-            background: linear-gradient(135deg, #956bd4, #7549b8);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 16px rgba(75, 40, 120, 0.3);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 27px;
-            }
-
-            .graf-container {
-                height: 280px;
-            }
-
-            button {
-                padding: 12px 18px;
-            }
-        }
-    </style>
+</style> 
 </head>
+
 
 <body>
 
-    <h1>Temperaturhistorikk</h1>
+    <h1>Velkommen til Graf!</h1>
 
-    <p>Her kan du følge temperaturen over tid.</p>
-
-    <div class="graf">
-        <h2>Temperaturmålinger</h2>
-
-        <div class="graf-container">
-            <canvas id="temperatureChart"></canvas>
-        </div>
-    </div>
+    <p>Her skal vi vise en graf om tempereaturen.</p>
 
     <a href="Temp_prosjekt_gruppe5.html">
         <button>Tilbake til forsiden</button>
     </a>
 
-    <script>
-        const ctx =
-            document.getElementById("temperatureChart");
-
-        const chart = new Chart(ctx, {
-            type: "line",
-
-            data: {
-                labels: [],
-                datasets: [{
-                    label: "Temperatur (°C)",
-                    data: [],
-                    borderColor: "#8052c7",
-                    backgroundColor: "rgba(138, 43, 226, 0.15)",
-                    fill: true,
-                    tension: 0.3
-                }]
-            },
-
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-
-                scales: {
-                    y: {
-                        title: {
-                            display: true,
-                            text: "Grader Celsius"
-                        }
-                    },
-
-                    x: {
-                        title: {
-                            display: true,
-                            text: "Tidspunkt"
-                        }
-                    }
-                }
-            }
-        });
-
-        async function hentTemperatur() {
-            try {
-                const response =
-                    await fetch("/api/temperature");
-
-                if (!response.ok) {
-                    throw new Error("Feil ved henting");
-                }
-
-                const data = await response.json();
-
-                if (!data.success ||
-                    !Number.isFinite(data.temperature)) {
-                    throw new Error("Ugyldig temperatur");
-                }
-
-                chart.data.labels.push(
-                    new Date().toLocaleTimeString("no-NO")
-                );
-
-                chart.data.datasets[0].data.push(
-                    data.temperature
-                );
-
-                if (chart.data.labels.length > 30) {
-                    chart.data.labels.shift();
-                    chart.data.datasets[0].data.shift();
-                }
-
-                chart.update();
-
-            } catch (error) {
-                console.error("Graf-feil:", error);
-            }
-        }
-
-        hentTemperatur();
-        setInterval(hentTemperatur, 2000);
-    </script>
+   
 
 </body>
+<head>
+<style>
+
+button {
+background-color: blueviolet;
+color: white;
+padding: 12px 25px;
+border: none;
+border-radius: 8px;
+cursor: pointer;
+font-size: 16px;
+ margin: 10px;
+    }
+
+</style>
+</head>
 </html>
